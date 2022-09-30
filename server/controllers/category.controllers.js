@@ -14,7 +14,7 @@ module.exports.categoryControllers = {
     }
   },
 
-  getAllCaetgories: async (req, res, next) => {
+  getAllCategories: async (req, res, next) => {
     try {
       const categories = await Category.find()
       if (categories.length == 0) throw createError(404, 'Not categories added yet')

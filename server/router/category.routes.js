@@ -4,10 +4,10 @@ const router = require('express').Router()
 
 
 // Add categories
-router.post('/', categoryControllers)
+router.post('/', categoryControllers.createCategory)
 
 // GEt all categories
-router.get('/', categoryControllers)
+router.get('/', categoryControllers.getAllCategories)
 
 
 module.exports = router

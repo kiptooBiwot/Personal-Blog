@@ -1,18 +1,31 @@
 const Post = require('../models/Post')
 const createError = require('http-errors')
+const slugify = require('slugify')
 
 module.exports.postControllers = {
   createArticle: async (req, res, next) => {
     try {
+      const options = {
+        replacement: '-',
+        remove: undefined,
+        lower: true,
+        strict: false,
+        locale: 'en',
+        trim: true
+      }
+      const slug = slugify(req.body.title, options)
+
       const newArticle = new Post({
-        ...req.body
+        ...req.body,
+        slug: slug
       })
 
       const savedArticle = await newArticle.save()
 
       res.json({ msg: 'Your article has been published', ...savedArticle._doc })
+      // res.json({ msg: 'Your article has been published', data: req.body })
     } catch (error) {
-      return next(error)
+      next(error)
     }
   },
 
@@ -32,7 +45,7 @@ module.exports.postControllers = {
 
       res.json({ msg: 'Article deleted!' })
     } catch (error) {
-      return next()
+      next(error)
     }
   },
 
@@ -40,18 +53,22 @@ module.exports.postControllers = {
   getArticles: async (req, res, next) => {
     const username = req.params.name
     const category = req.params.category
+
+    // TODO: Handle search properly
     try {
       // TODO: Search using another parameter, username does not work
       if (username) {
         articles = await Post.find({ username })
+          .populate('user', '-password')
+          .populate('category', 'name')
       } else if (category) {
         articles = await Post.find({
-          categories: {
+          category: {
             $in: [category]
           }
-        })
+        }).populate('user', '-password')
       } else {
-        articles = await Post.find()
+        articles = await Post.find().populate('user', '-password')
       }
 
       if (articles.length == 0) throw createError(404, 'No articles published yet.')
@@ -66,6 +83,8 @@ module.exports.postControllers = {
   getArticle: async (req, res, next) => {
     try {
       const article = await Post.findById(req.params.id)
+        .populate('user', '-password')
+        .populate('category', 'name')
 
       if (!article) throw createError(404, 'The article seems to have been deleted')
 

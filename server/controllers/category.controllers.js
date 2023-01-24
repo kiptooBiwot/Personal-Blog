@@ -8,7 +8,7 @@ module.exports.categoryControllers = {
     try {
       const savedCategory = await newCategory.save()
 
-      res.json({ msg: 'Category saved', savedCategory })
+      res.json({ msg: 'Category saved', ...savedCategory._doc })
     } catch (error) {
       return next(error)
     }

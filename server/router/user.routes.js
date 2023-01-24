@@ -11,5 +11,7 @@ router.delete('/:id', userControllers.deleteUser)
 // GET A SINGLE USER
 router.get('/:id', userControllers.getUser)
 
+router.get('/', userControllers.getUsers)
+
 
 module.exports = router

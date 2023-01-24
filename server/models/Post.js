@@ -10,17 +10,41 @@ const postSchema = Schema({
     type: String,
     required: true,
   },
+  content: {
+    type: String,
+    requried: true
+  },
+  slug: {
+    type: String,
+    required: true
+  },
   photo: {
     type: String,
     required: false,
   },
-  username: {
-    type: String,
-    requried: true,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
-  categories: {
-    type: Array,
-    required: false,
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true,
+  },
+  tags: [{
+    type: String,
+    requried: false,
+    default: ''
+  }],
+  published: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
+  comments: {
+    type: Schema.Types.ObjectId,
+    ref: 'Comment'
   }
 }, { timestamps: true })
 

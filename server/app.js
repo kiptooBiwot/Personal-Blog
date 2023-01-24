@@ -8,6 +8,8 @@ require('./utilities/mongodb.init')
 const app = express()
 const PORT = process.env.PORT || 3000
 
+// Authorization
+const authJwt = require('./utilities/jwt')
 
 // Routes
 const authRoutes = require('./router/auth.routes')
@@ -21,11 +23,12 @@ app.use(express.json())
 // app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 app.use(morgan('dev'))
+app.use(authJwt())
 
-app.use('/api/auth', authRoutes)
-app.use('/api/user', userRoutes)
-app.use('/api/article', postRoutes)
-app.use('/api/category', categoryRoutes)
+app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/user', userRoutes)
+app.use('/api/v1/article', postRoutes)
+app.use('/api/v1/category', categoryRoutes)
 
 // Error response
 app.use((err, req, res, next) => {

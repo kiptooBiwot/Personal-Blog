@@ -16,7 +16,7 @@ module.exports.authControllers = {
       })
 
       const savedUser = await newUser.save()
-      res.json({ msg: 'Registation completed successfully' })
+      res.json({ msg: 'Registation completed successfully. Login to poceed.' })
     } catch (error) {
       return next(error)
     }
@@ -35,12 +35,12 @@ module.exports.authControllers = {
       if (!isValidUser) throw createError(401, 'Invalid email and/or password')
 
       // create a token
-      const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY)
+      const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.SECRET_KEY)
 
       // Send all other fields without the password
       const { password, ...others } = user._doc
 
-      res.header(token).json({ msg: 'Login Successful', ...others })
+      res.header(token).json({ msg: 'Login Successful', token, ...others })
     } catch (error) {
       return next(error)
     }

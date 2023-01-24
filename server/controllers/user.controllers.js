@@ -48,15 +48,28 @@ module.exports.userControllers = {
   // GET USER
   getUser: async (req, res, next) => {
     try {
-      const user = await User.findById(req.params.id)
+      const user = await User.findById(req.params.id).select('-password')
 
       if (!user) throw createError(404, 'User not found.')
 
       // Get user fields minus the password field
-      const { password, ...userProfile } = user._doc
-      res.json(userProfile)
+      // const { password, ...userProfile } = user._doc
+      res.json(useruserProfile)
     } catch (error) {
       return next(error)
+    }
+  },
+
+  // Get users
+  getUsers: async (req, res, next) => {
+    try {
+      const users = await User.find({}).select('-password')
+
+      if (!users) throw createError[404]('No user registered yet. You may want to register a new user')
+
+      res.status(200).json({ users })
+    } catch (error) {
+      next(error)
     }
   }
 

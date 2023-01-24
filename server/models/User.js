@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose')
 
 const userSchema = Schema({
-  username: {
+  name: {
     type: String,
     required: true,
     unique: true,
@@ -18,6 +18,15 @@ const userSchema = Schema({
   profilePic: {
     type: String,
     default: ''
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
+  accountActivated: {
+    type: Boolean,
+    default: false,
+    required: true
   }
 }, { timestamps: true })
 

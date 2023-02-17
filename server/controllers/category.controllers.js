@@ -3,12 +3,13 @@ const createError = require('http-errors')
 
 module.exports.categoryControllers = {
   createCategory: async (req, res, next) => {
+
     const newCategory = new Category(req.body)
 
     try {
       const savedCategory = await newCategory.save()
 
-      res.json({ msg: 'Category saved', ...savedCategory._doc })
+      res.json({ msg: 'Category saved' })
     } catch (error) {
       return next(error)
     }

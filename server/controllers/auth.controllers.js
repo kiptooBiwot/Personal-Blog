@@ -7,6 +7,10 @@ const jwt = require('jsonwebtoken')
 module.exports.authControllers = {
   registerUser: async (req, res, next) => {
     try {
+      console.log('USER FROM THE FRONTEND: ' + req.body);
+      const userExists = await User.findOne({ email: req.body.email })
+
+      if (userExists) throw createError.Conflict('The email is already taken. You may want to log in.')
       // Encrypt password
       const hashedPassword = await bcrypt.hash(req.body.password, 12)
 
@@ -16,7 +20,7 @@ module.exports.authControllers = {
       })
 
       const savedUser = await newUser.save()
-      res.json({ msg: 'Registation completed successfully. Login to poceed.' })
+      res.json({ message: 'Registation completed successfully. Login to poceed.', user: savedUser })
     } catch (error) {
       return next(error)
     }
@@ -40,7 +44,7 @@ module.exports.authControllers = {
       // Send all other fields without the password
       const { password, ...others } = user._doc
 
-      res.header(token).json({ msg: 'Login Successful', token, ...others })
+      res.header(token).json({ message: 'Login Successful', token, user: others })
     } catch (error) {
       return next(error)
     }

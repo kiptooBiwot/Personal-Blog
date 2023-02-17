@@ -4,7 +4,9 @@ const slugify = require('slugify')
 
 module.exports.postControllers = {
   createArticle: async (req, res, next) => {
+    // console.log('REQ.USER: ' + req.user)
     try {
+      // console.log(req.body)
       const options = {
         replacement: '-',
         remove: undefined,
@@ -17,12 +19,14 @@ module.exports.postControllers = {
 
       const newArticle = new Post({
         ...req.body,
+        user: req.user._id,
         slug: slug
       })
+      console.log('Article To Be SAVED: ', newArticle)
 
       const savedArticle = await newArticle.save()
 
-      res.json({ msg: 'Your article has been published', ...savedArticle._doc })
+      res.json({ msg: savedArticle.published ? 'Your article has been published' : 'Your article has been saved to draft.', ...savedArticle._doc })
       // res.json({ msg: 'Your article has been published', data: req.body })
     } catch (error) {
       next(error)

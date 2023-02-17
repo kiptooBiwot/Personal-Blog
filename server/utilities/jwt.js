@@ -11,10 +11,11 @@ const authJwt = () => {
   ).unless({
     path: [
       // Use a regular expression to all all routes under products to be viewed without auth token
-      { url: /\/api\/v1\/article(.*)/, methods: ['GET', 'OPTIONS'] },
+      { url: /\/api\/v1\/article(.*)/, methods: ['GET', 'OPTIONS', 'POST'] },
       { url: /\/api\/v1\/category(.*)/, methods: ['GET', 'OPTIONS'] },
-      '/api/v1/auth/login',
-      '/api/v1/auth/register',
+      { url: /\/api\/v1\/auth(.*)/, methods: ['GET', 'OPTIONS', 'POST'] },
+      // '/api/v1/auth/login',
+      // '/api/v1/auth/register',
     ]
   })
 }

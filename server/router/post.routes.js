@@ -1,9 +1,10 @@
 const { postControllers } = require('../controllers/post.controllers')
+const { protect } = require('../utilities/auth.middleware')
 
 const router = require('express').Router()
 
 // CREATE Post
-router.post('/', postControllers.createArticle)
+router.post('/', protect, postControllers.createArticle)
 
 // UPDATE Post
 router.put('/:id', postControllers.updateArticle)

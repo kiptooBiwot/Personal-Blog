@@ -75,7 +75,7 @@ module.exports.postControllers = {
   // Get a user's articles
   getUserArticles: async (req, res, next) => {
     const { id } = req.user
-    console.log('ID FROM FRONTEND:', id)
+    // console.log('ID FROM FRONTEND:', id)
     const category = req.params.category
 
     // TODO: Handle search properly
@@ -95,11 +95,14 @@ module.exports.postControllers = {
         articles = await Post.find().populate('user', '-password')
       }
 
-      if (articles.length == 0) res.status(204).json({ message: 'No articles published yet.' })
+      if (articles.length == 0) {
+        res.status(204).json({ message: 'No articles published yet.' })
+      } else {
+        res.status(200).json(articles)
+      }
 
-      res.status(200).json(articles)
     } catch (error) {
-      return next(error)
+      next(error)
     }
   },
 

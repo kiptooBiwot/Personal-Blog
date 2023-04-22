@@ -13,9 +13,9 @@ const icons = reactive({
 const menuItems = reactive([
   { title: 'Admin Dashboard', url: '/dashboard', icon: icons.dashboard },
   { title: 'Dashboard', url: '/dashboard', icon: icons.dashboard },
-  { title: 'Posts', url: '/dashboard/posts', icon: icons.article },
+  // { title: 'Posts', url: '/dashboard/posts', icon: icons.article },
   { title: 'Draft Articles', url: '/dashboard/draft', icon: icons.draft },
-  { title: 'Settings', url: '/dashboard/settings', icon: icons.settings },
+  // { title: 'Settings', url: '/dashboard/settings', icon: icons.settings },
   { title: 'Profile', url: '/dashboard/profile', icon: icons.profile },
 ])
 
@@ -49,6 +49,4 @@ const closeMenu = () => {
 </template>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>

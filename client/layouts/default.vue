@@ -9,6 +9,13 @@
     </header>
     <main>
       <slot />
+      <ClientOnly>
+      <ToastList />
+    </ClientOnly>
+      <!-- <Spinner /> -->
+      <!-- <ClientOnly>
+                <NotificationList />
+              </ClientOnly> -->
     </main>
     <footer>
       <Footer />
@@ -17,6 +24,4 @@
 </template>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>

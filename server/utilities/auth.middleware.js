@@ -6,6 +6,8 @@ module.exports = {
   protect: async (req, res, next) => {
     let token
 
+    console.log('AUTHORIZATION TOKEN: ', req.headers.authorization);
+
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       try {
         // Get the token from the auth header

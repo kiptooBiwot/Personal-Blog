@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   modules: [
     '@formkit/nuxt',
     '@vueuse/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
     // '@nuxtjs/universal-storage',
     [
       '@pinia/nuxt',
@@ -23,7 +24,7 @@ export default defineNuxtConfig({
     ]
   ],
   buildModules: [
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
   ],
   css: ['~/assets/css/main.css'],
   plugins: ['~/plugins/QuillEditor.client.js'],

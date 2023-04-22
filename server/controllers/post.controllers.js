@@ -1,12 +1,29 @@
 const Post = require('../models/Post')
 const createError = require('http-errors')
 const slugify = require('slugify')
+const cloudinary = require('../utilities/cloudinary.utility')
 
 module.exports.postControllers = {
   createArticle: async (req, res, next) => {
     // console.log('REQ.USER: ' + req.user)
     try {
-      // console.log(req.body)
+      if (req.body === {}) throw createError[404]('Req.body is null!')
+
+      let savedURI = null
+
+      if (req.file) {
+        const file = req.file
+        const { path } = file
+
+        const imageURI = await cloudinary.uploader.upload(path, {
+          folder: "Personal Profile"
+        })
+
+        savedURI = imageURI.secure_url
+      }
+
+      console.log('SAVED URI for IMAGE: ', savedURI)
+
       const options = {
         replacement: '-',
         remove: undefined,
@@ -20,14 +37,15 @@ module.exports.postControllers = {
       const newArticle = new Post({
         ...req.body,
         user: req.user._id,
+        photo: savedURI,
         slug: slug
       })
       console.log('Article To Be SAVED: ', newArticle)
 
       const savedArticle = await newArticle.save()
 
-      res.json({ msg: savedArticle.published ? 'Your article has been published' : 'Your article has been saved to draft.', ...savedArticle._doc })
-      // res.json({ msg: 'Your article has been published', data: req.body })
+      res.json({ message: savedArticle.published ? 'Your article has been published' : 'Your article has been saved to draft.', ...savedArticle._doc })
+      // res.json({ message: 'Your article has been published', data: req.body })
     } catch (error) {
       next(error)
     }
@@ -37,7 +55,7 @@ module.exports.postControllers = {
     try {
       const updatedArticle = await Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
 
-      res.json({ msg: 'Article updated!', ...updatedArticle._doc })
+      res.json({ message: 'Article updated!', ...updatedArticle._doc })
     } catch (error) {
       return next()
     }
@@ -45,24 +63,26 @@ module.exports.postControllers = {
 
   deleteArticle: async (req, res, next) => {
     try {
+      console.log('Article to be deleted ', req.params.id)
       await Post.findByIdAndDelete(req.params.id)
 
-      res.json({ msg: 'Article deleted!' })
+      res.json({ message: 'Article deleted!' })
     } catch (error) {
       next(error)
     }
   },
 
-  // Get all articles
-  getArticles: async (req, res, next) => {
-    const username = req.params.name
+  // Get a user's articles
+  getUserArticles: async (req, res, next) => {
+    const { id } = req.user
+    console.log('ID FROM FRONTEND:', id)
     const category = req.params.category
 
     // TODO: Handle search properly
     try {
       // TODO: Search using another parameter, username does not work
-      if (username) {
-        articles = await Post.find({ username })
+      if (id) {
+        articles = await Post.find({ id })
           .populate('user', '-password')
           .populate('category', 'name')
       } else if (category) {
@@ -75,11 +95,24 @@ module.exports.postControllers = {
         articles = await Post.find().populate('user', '-password')
       }
 
-      if (articles.length == 0) throw createError(404, 'No articles published yet.')
+      if (articles.length == 0) res.status(204).json({ message: 'No articles published yet.' })
 
-      res.json(articles)
+      res.status(200).json(articles)
     } catch (error) {
       return next(error)
+    }
+  },
+
+  // Get all articles for home display
+  getArticles: async (req, res, next) => {
+    try {
+      const articles = await Post.find().populate('user', '-password').populate('category', 'name')
+
+      if (articles.length == 0) res.status(204).json({ message: 'No articles published yet.' })
+
+      res.status(200).json(articles)
+    } catch (error) {
+      next(error)
     }
   },
 

@@ -1,22 +1,26 @@
 <script setup>
 
+import { useArticleStore } from "@/stores/articleStore.js"
+import { storeToRefs } from "pinia"
 
-const articles = reactive([
-  { title: 'No, Elon and Jack are not competitors. They are collaborating.', author: 'John Smith', date: 'Jan 25', readTime: 5, slug: 'no-elon-and-jack-are-not-competitors' },
-  { title: 'This is the second article.', author: 'John Smith', date: 'Jan 25', readTime: 7 },
-  { title: 'This is the third article. Let\'s go', author: 'John Doe', date: 'Jan 25', readTime: 3 },
-  { title: 'This is the fourth article. Let\'s go', author: 'John Alex', date: 'Jan 25', readTime: 6 },
-  { title: 'This is the fifth article. Let\'s go', author: 'John Snoop', date: 'Jan 25', readTime: 2 },
-  { title: 'This is the sixth article. Let\'s go', author: 'John Rambo', date: 'Jan 25', readTime: 10 },
-])
+const articleStore = useArticleStore()
+
+const { allArticles } = storeToRefs(articleStore)
+
+// const articlePostDate = useTimeAgo(allArticles.updatedAt)
+
+onMounted(() => {
+  articleStore.getArticles()
+})
+
 </script>
 
 <template>
   <div>
-    <div class="bg-orange-100 h-1/2 w-full py-16 border-b border-gray-800">
+    <div class="bg-teal-500 h-1/2 w-full py-16 border-b border-gray-800">
       <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2">
         <div class="space-y-4">
-          <h1 class="text-6xl font-bold">
+          <h1 class="text-6xl  font-bold">
             Learning while Blogging.
           </h1>
           <p class="text-gray-600 text-2xl pb-4">Learn better by documenting your learning process, blog by blog.</p>
@@ -28,7 +32,7 @@ const articles = reactive([
           </NuxtLink>
         </div>
         <div class="flex items-center justify-center">
-          <img src="@/assets/images/blogging.png" alt="" class="w-80 h-w-80">
+          <img src="@/assets/images/blogging.png" alt="" class="w-80 h-80 rounded-full">
         </div>
       </div>
     </div>
@@ -36,30 +40,38 @@ const articles = reactive([
       <div class="max-w-6xl mx-auto">
         <h4 class="uppercase text-sm font-bold pb-5">Latest Articles</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          <HomeFeatured v-for="(article, index) in articles" :key="index" :article="article" :index="index" />
+          <HomeFeatured v-for="(article, index) in allArticles.slice(0, 6)" :key="index" :article="article"
+            :index="index" />
         </div>
       </div>
-    </div>
-    <div class="py-20">
+  </div>
+  <div class="py-20">
       <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10">
-        <div class="col-span-8 space-y-10">
-          <div v-for="(article, index) in articles.slice(1, 4)" :key="index">
-            <NuxtLink :to="`/article/${article.slug}`" class="flex justify-between">
+        <div v-if="allArticles" class="col-span-8 space-y-10">
+          <div v-for="(article, index) in allArticles.slice(0, 3)" :key="index">
+            <NuxtLink :to="`/article/${article.slug}`" class="flex justify-between gap-4">
               <div>
-                <p class="font-bold text-gray-500 text-xs">{{ article.author }}</p>
+                <p class="font-bold text-gray-500 text-xs">{{ article.user.name }}</p>
                 <p class="font-semibold text-3xl">{{ article.title }} </p>
-                <p class="text-gray-400 font-medium text-lg">Learning that self-discovery is a process, not a
-                  punishment
+                <p v-html="article.content.slice(0, 100) + '...'" class="text-gray-400 font-medium text-base">
                 </p>
                 <div class="flex gap-10 text-gray-500  font-bold text-xs">
-                  <p>{{ article.date }}</p>
-                  <p>{{ article.readTime }} min read</p>
+
+                  <!-- <ClientOnly> -->
+                  <TimeAgo :date="article.updatedAt" />
+                  <!-- </ClientOnly> -->
+                  <!-- <p>
+                              {{ timeAgo = useTimeAgo(new Date(article.updatedAt)) }}
+                            </p> -->
+                  <!-- <span class="px-2">|</span> -->
+                  <p>
+                    <HomeReadingTime :articleText="article.content" />
+                  </p>
                 </div>
               </div>
               <div class="">
-                <img
-                  src="https://images.unsplash.com/photo-1605379399843-5870eea9b74e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=898&q=80"
-                  alt="" class="w-64 h-32 object-cover object-top place-items-end">
+                <img :src="article.photo" alt=""
+                  class="w-64 h-32 object-cover rounded-md shadow object-top place-items-end">
               </div>
             </NuxtLink>
           </div>
@@ -77,6 +89,4 @@ const articles = reactive([
   </div>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

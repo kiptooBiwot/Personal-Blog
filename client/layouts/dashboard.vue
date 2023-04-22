@@ -51,7 +51,10 @@ const runLogout = async () => {
             <XMarkIcon v-if="showMenu" class="w-8 h-8 text-gray-500 md:hidden" @click.prevent="showMenu = !showMenu" />
             <div>Search</div>
             <div class="flex items-center gap-4">
-              <h3>Notifications</h3>
+              <NuxtLink to="/"
+                class=" text-green-600 py-1 px-2 rounded bg-green-100  hover:bg-green-300 hover:text-white hover:border-green-300 transition duration-700 ease-in-out">
+                Blogg Home</NuxtLink>
+              <!-- <h3>Notifications</h3> -->
               <div class="w-11 h-11 rounded-full bg-gray-200"></div>
               <button class="px-3 py-2 bg-red-400 rounded text-white text-xs uppercase"
                 @click.prevent="runLogout">Logout</button>
@@ -73,6 +76,14 @@ const runLogout = async () => {
         </div>
         <div class="py-6 px-5 bg-gray-50 h-full">
           <slot />
+          <!-- <ClientOnly> -->
+          <!-- <Notification /> -->
+          <!-- <notification-list /> -->
+          <!-- </ClientOnly> -->
+          <ClientOnly>
+            <ToastList />
+          </ClientOnly>
+          <!-- <Spinner /> -->
         </div>
       </div>
     </div>
@@ -80,6 +91,4 @@ const runLogout = async () => {
 </template>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>

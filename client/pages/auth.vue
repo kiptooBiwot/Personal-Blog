@@ -48,9 +48,7 @@ const handleRegister = async (data) => {
 
 <template>
   <div class="relative">
-    <img
-      src="https://images.unsplash.com/photo-1639153696735-65eb34198e75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80"
-      alt="" class="inset-0 w-full min-h-screen object-cover fixed">
+    <img src="~/assets/images/auth_bg1.jpg" alt="" class="inset-0 w-full min-h-screen object-cover fixed">
 
     <div
       class="absolute md:right-32 top-10 mx-5 md:mx-0 md:top-20 bg-white shadow-md rounded-lg h-auto px-10 py-5 w-[90%] md:w-[400px]">
@@ -89,6 +87,4 @@ const handleRegister = async (data) => {
 </template>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>

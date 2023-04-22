@@ -9,7 +9,7 @@ module.exports.categoryControllers = {
     try {
       const savedCategory = await newCategory.save()
 
-      res.json({ msg: 'Category saved' })
+      res.status(201).json({ message: 'Category saved' })
     } catch (error) {
       return next(error)
     }
@@ -20,7 +20,7 @@ module.exports.categoryControllers = {
       const categories = await Category.find()
       if (categories.length == 0) throw createError(404, 'Not categories added yet')
 
-      res.json(categories)
+      res.status(200).json(categories)
     } catch (error) {
       return next(error)
     }

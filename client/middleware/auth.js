@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   // if (to.params.id === '1') {
   //   return abortNavigation()
   // }
-  console.log('ROUTE Middleware!')
+  // console.log('ROUTE Middleware!')
 
   // const { authenticated } = storeToRefs(useAuthStore())
   const token = useCookie('token')

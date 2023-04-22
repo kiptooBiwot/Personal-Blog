@@ -1,4 +1,7 @@
 <script setup>
+import { computed } from '@vue/reactivity';
+import { useTimeAgo } from '@vueuse/core'
+
 const props = defineProps({
   article: {
     type: Object,
@@ -8,7 +11,7 @@ const props = defineProps({
     type: Number
   }
 })
-// console.log(props.index)
+
 </script>
 
 <template>
@@ -22,8 +25,13 @@ const props = defineProps({
         <p class="font-bold text-gray-500 text-xs">{{ article.author }}</p>
         <p class="font-semibold text-2xl">{{ article.title }} </p>
         <div class="flex gap-10 text-gray-500  font-bold text-xs">
-          <p>{{ article.date }}</p>
-          <p>{{ article.readTime }} min read</p>
+          <!-- <p>{{ datePosted }}</p> -->
+          <p>
+            <TimeAgo :date="article.updatedAt" />
+          </p>
+          <p>
+            <HomeReadingTime :articleText="article.content" />
+          </p>
         </div>
       </div>
     </div>
@@ -31,6 +39,4 @@ const props = defineProps({
 </template>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>
